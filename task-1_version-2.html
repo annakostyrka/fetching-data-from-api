@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get info from API</title>
+    <style>
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .table-primary {
+            width: 1000px;
+            max-width: 100%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .table-primary td, .table-primary th {
+            border: 1px solid #000;
+            padding: 15px 40px;
+        }
+
+
+    </style>
+    <script>
+        let url = "https://api.themoviedb.org/3/movie/now_playing?api_key=e530dbf87d3f35fe1c14ace5c962084a"
+        let options = {
+            method: 'GET',
+        }
+
+        let request = fetch(url,options);
+        request.then(function(response) {
+            return response.json();
+        })
+        .then (function (obj){
+            let results = obj.results;
+            let div = document.querySelector(".container");
+            let table = document.createElement("table");
+            div.append(table);
+            table.className = "table-primary";
+
+            
+            let firstRow = document.createElement("tr");
+            table.append(firstRow);
+            let header;
+
+            for (let i=0; i < 4; i++){
+                header = document.createElement("th");
+                firstRow.append (header);
+            }
+
+            console.log(firstRow);
+
+            let header1 = firstRow.firstChild;
+            console.log(firstRow.firstChild);
+            header1.innerHTML = "Movie title";
+            let header2 = header1.nextSibling;
+            header2.innerHTML = "Movie poster";
+            let header3 = header2.nextSibling;
+            header3.innerHTML = "Overview";
+            let header4 = header3.nextSibling;
+            header4.innerHTML = "Release date";
+            
+
+
+            for (let i = 0; i< results.length; i++) {
+                let row = document.createElement("tr");
+                table.append(row);
+
+                let cell;
+                for (let j=0; j<4; j++) {
+                    cell = document.createElement("td");
+                    row.append(cell);
+
+                }
+                cell = row.firstChild;
+                cell.innerHTML = results[i].title;
+                let cell2 = cell.nextSibling;
+                let img = document.createElement("img");
+                img.src = "https://www.themoviedb.org/t/p/w100_and_h100_multi_faces/" + results[i].backdrop_path;
+                let cell3 = cell2.nextSibling;
+                cell2.appendChild(img);
+                cell3.innerHTML = results[i].overview;
+                let cell4 = cell3.nextSibling;
+                cell4.innerHTML = results[i].release_date;
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container"></div>
+</body>
+</html>
